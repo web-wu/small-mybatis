@@ -1,5 +1,7 @@
 package com.tabwu.mybatis.binding;
 
+import com.tabwu.mybatis.session.SqlSession;
+
 import java.lang.reflect.Proxy;
 import java.util.Map;
 
@@ -7,7 +9,7 @@ import java.util.Map;
  * @PROJECT_NAME: small-mybatis
  * @USER: tabwu
  * @DATE: 2022/6/16 15:19
- * @DESCRIPTION:
+ * @DESCRIPTION: 映射器代理工厂
  */
 public class MapperProxyFactory<T> {
 
@@ -17,7 +19,7 @@ public class MapperProxyFactory<T> {
         this.mapperInterface = mapperInterface;
     }
 
-    public T newInstance(Map<String,String> sqlSession) {
+    public T newInstance(SqlSession sqlSession) {
         MapperProxy<T> mapperProxy = new MapperProxy<>(sqlSession, mapperInterface);
         return (T) Proxy.newProxyInstance(mapperInterface.getClassLoader(),new Class[]{mapperInterface},mapperProxy);
     }

@@ -12,7 +12,7 @@ import java.util.HashMap;
  */
 public class test1 {
 
-    @Test
+    /*@Test
     public void Test1() {
         MapperProxyFactory<UserMapper> mapperProxyFactory = new MapperProxyFactory<>(UserMapper.class);
 
@@ -22,6 +22,6 @@ public class test1 {
         UserMapper userMapper = mapperProxyFactory.newInstance(sqlSession);
         String res = userMapper.queryUserById(11L);
         System.out.println(res);
-    }
+    }*/
 
 }

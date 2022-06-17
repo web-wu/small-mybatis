@@ -15,6 +15,22 @@
 
 
     <dependencies>
+        <!--类扫描工具-->
+        <dependency>
+            <groupId>cn.hutool</groupId>
+            <artifactId>hutool-all</artifactId>
+            <version>4.1.1</version>
+        </dependency>
+        <!--类扫描工具-->
+
+        <!--xml文件解析-->
+        <dependency>
+            <groupId>dom4j</groupId>
+            <artifactId>dom4j</artifactId>
+            <version>1.1</version>
+        </dependency>
+        <!--xml文件解析-->
+
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
