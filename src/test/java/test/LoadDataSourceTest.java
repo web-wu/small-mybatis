@@ -8,30 +8,23 @@ import mapper.UserMapper;
 import org.junit.Test;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.Reader;
 
 /**
- * @PROJECT_NAME: small-mybatis
- * @USER: tabwu
- * @DATE: 2022/8/26 13:38
- * @DESCRIPTION:
+ * @ProjectName: small-mybatis
+ * @Author: tabwu
+ * @Date: 2022/8/27 18:08
+ * @Description:
  */
-public class Test3 {
+public class LoadDataSourceTest {
+
 
     @Test
-    public void loadConfigFileTest() throws IOException {
-        Reader reader = Resources.getResourceAsReader("mybatis-config-home.xml");
+    public void testDataSource() throws IOException {
+        Reader reader = Resources.getResourceAsReader("mybatis-config.xml");
         SqlSessionFactory sqlSessionFactory = new SqlSessionFactoryBuilder().build(reader);
         SqlSession sqlSession = sqlSessionFactory.openSession();
         UserMapper userMapper = sqlSession.getMapper(UserMapper.class);
-        userMapper.queryUserById(10);
-    }
-
-
-    @Test
-    public void testResource() {
-        InputStream inputStream = Test3.class.getClassLoader().getResourceAsStream("mybatis-config.xml");
-        System.out.println(inputStream);
+        userMapper.queryUserById(123456789);
     }
 }

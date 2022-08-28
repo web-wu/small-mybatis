@@ -1,6 +1,7 @@
 package com.tabwu.mybatis.builder;
 
 import com.tabwu.mybatis.session.Configuration;
+import com.tabwu.mybatis.type.TypeAliasRegistry;
 
 /**
  * @PROJECT_NAME: small-mybatis
@@ -10,10 +11,13 @@ import com.tabwu.mybatis.session.Configuration;
  */
 public class BaseBuilder {
 
-    protected Configuration configuration;
+    protected final Configuration configuration;
+
+    protected final TypeAliasRegistry typeAliasRegistry;
 
     public BaseBuilder(Configuration configuration) {
         this.configuration = configuration;
+        this.typeAliasRegistry = configuration.getTypeAliasRegistry();
     }
 
     public Configuration getConfiguration() {

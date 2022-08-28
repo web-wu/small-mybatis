@@ -24,12 +24,23 @@ public class Resources {
      * @throws IOException
      */
     private static InputStream getResourceAsStream(String resource) throws IOException {
-        InputStream inputStream = Resources.class.getClassLoader().getResourceAsStream(resource);
-        if (inputStream == null) {
-            throw new IOException("Could not find resource" + resource);
+        ClassLoader[] classLoaders = getClassLoaders();
+
+        for (ClassLoader classLoader : classLoaders) {
+            InputStream inputStream = classLoader.getResourceAsStream(resource);
+            if (inputStream != null) {
+                return inputStream;
+            }
         }
-        return inputStream;
+        throw new IOException("Could not find resource " + resource);
     }
+
+    private static ClassLoader[] getClassLoaders() {
+        return new ClassLoader[]{
+                ClassLoader.getSystemClassLoader(),
+                Thread.currentThread().getContextClassLoader()};
+    }
+
 
     public static Class<?> classForName(String namespace) throws ClassNotFoundException {
         return Class.forName(namespace);
