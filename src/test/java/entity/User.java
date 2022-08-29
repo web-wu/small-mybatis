@@ -12,15 +12,15 @@ public class User {
 
     private Integer id;
     private String username;
-    private int age;
+    private Integer age;
 
-    public User(Integer id, String username, int age) {
+    public User() {
+    }
+
+    public User(Integer id, String username, Integer age) {
         this.id = id;
         this.username = username;
         this.age = age;
-    }
-
-    public User() {
     }
 
     public Integer getId() {
@@ -39,12 +39,21 @@ public class User {
         this.username = username;
     }
 
-    public int getAge() {
+    public Integer getAge() {
         return age;
     }
 
-    public void setAge(int age) {
+    public void setAge(Integer age) {
         this.age = age;
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", username='" + username + '\'' +
+                ", age=" + age +
+                '}';
     }
 
     @Override
@@ -52,7 +61,7 @@ public class User {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         User user = (User) o;
-        return age == user.age && Objects.equals(id, user.id) && Objects.equals(username, user.username);
+        return Objects.equals(id, user.id) && Objects.equals(username, user.username) && Objects.equals(age, user.age);
     }
 
     @Override

@@ -84,7 +84,7 @@ public class XmlConfigBuilder extends BaseBuilder {
                 TransactionFactory txFactory = (TransactionFactory) typeAliasRegistry.getAliasType(element.element("transactionManager").attributeValue("type")).newInstance();
                 // 数据源工厂
                 Element dataSourceEle = element.element("dataSource");
-                DataSourceFactory dataSourceFactory = (DataSourceFactory) typeAliasRegistry.getAliasType(dataSourceEle.attributeValue("DRUID")).newInstance();
+                DataSourceFactory dataSourceFactory = (DataSourceFactory) typeAliasRegistry.getAliasType(dataSourceEle.attributeValue("type")).newInstance();
                 List<Element> propertyList = dataSourceEle.elements("property");
                 Properties properties = new Properties();
                 for (Element pro : propertyList) {

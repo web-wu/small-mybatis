@@ -1,5 +1,7 @@
 package mapper;
 
+import entity.User;
+
 /**
  * @PROJECT_NAME: small-mybatis
  * @USER: tabwu
@@ -8,7 +10,7 @@ package mapper;
  */
 public interface UserMapper {
 
-    String queryUserById(Integer id);
+    User queryUserById(Integer id);
 
-    String queryUsernameByAge(int age);
+    User queryUsernameByAge(int age);
 }

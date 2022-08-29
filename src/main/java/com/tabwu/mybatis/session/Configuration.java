@@ -2,8 +2,16 @@ package com.tabwu.mybatis.session;
 
 import com.tabwu.mybatis.binding.MapperRegistry;
 import com.tabwu.mybatis.dataSource.druid.DruidDataSourceFactory;
+import com.tabwu.mybatis.executor.Executor;
+import com.tabwu.mybatis.executor.SimpleExecutor;
+import com.tabwu.mybatis.executor.resultSet.DefaultResultSetsHandler;
+import com.tabwu.mybatis.executor.resultSet.ResultSetHandler;
+import com.tabwu.mybatis.executor.statement.PreparedResultHandler;
+import com.tabwu.mybatis.executor.statement.StatementHandler;
+import com.tabwu.mybatis.mapping.BoundSql;
 import com.tabwu.mybatis.mapping.Environment;
 import com.tabwu.mybatis.mapping.MappedStatement;
+import com.tabwu.mybatis.transaction.Transaction;
 import com.tabwu.mybatis.transaction.jdbc.JdbcTransactionFactory;
 import com.tabwu.mybatis.type.TypeAliasRegistry;
 
@@ -68,5 +76,21 @@ public class Configuration {
 
     public void setEnvironment(Environment environment) {
         this.environment = environment;
+    }
+
+
+    // 创建结果集处理器
+    public ResultSetHandler newResultSetHandler(Executor executor, MappedStatement ms, BoundSql boundSql) {
+        return new DefaultResultSetsHandler(executor,ms,boundSql);
+    }
+
+    // 初始化执行器
+    public Executor newExecuttor(Transaction transaction) {
+        return new SimpleExecutor(this,transaction);
+    }
+
+    //创建语句处理器
+    public StatementHandler newStatementHandler(Executor executor,MappedStatement ms,Object parameter,ResultHandler resultHandler,BoundSql boundSql) {
+        return new PreparedResultHandler(executor,ms,parameter,boundSql);
     }
 }
