@@ -5,7 +5,6 @@ import com.tabwu.mybatis.executor.resultSet.ResultSetHandler;
 import com.tabwu.mybatis.mapping.BoundSql;
 import com.tabwu.mybatis.mapping.MappedStatement;
 import com.tabwu.mybatis.session.Configuration;
-import com.tabwu.mybatis.session.ResultHandler;
 
 import java.sql.Connection;
 import java.sql.SQLException;

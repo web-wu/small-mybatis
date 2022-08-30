@@ -8,4 +8,16 @@
         where id = #{id}
     </select>
 
+    <insert id="addUser" parameterType="entity.User">
+        insert into user(id, username, age) values (#{id}, #{username}, #{age})
+    </insert>
+
+    <delete id="deleteUserById" parameterType="java.lang.Integer">
+        delete from user where id = #{id}
+    </delete>
+
+    <update id="update" parameterType="entity.User">
+        update user set id = #{id}, username = #{username}, age = #{age} where id = #{id}
+    </update>
+
 </mapper>

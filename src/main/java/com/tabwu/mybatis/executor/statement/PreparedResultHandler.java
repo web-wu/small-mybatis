@@ -3,7 +3,6 @@ package com.tabwu.mybatis.executor.statement;
 import com.tabwu.mybatis.executor.Executor;
 import com.tabwu.mybatis.mapping.BoundSql;
 import com.tabwu.mybatis.mapping.MappedStatement;
-import com.tabwu.mybatis.session.Configuration;
 import com.tabwu.mybatis.session.ResultHandler;
 
 import java.sql.Connection;
@@ -34,6 +33,13 @@ public class PreparedResultHandler extends BaseStatementHandler{
     public void parameterize(Statement statement) throws SQLException {
         PreparedStatement ps = (PreparedStatement) statement;
         ps.setInt(1,Integer.parseInt(((Object[]) paramterObject)[0].toString()));
+    }
+
+    @Override
+    public int update(Statement statement) throws SQLException {
+        PreparedStatement ps = (PreparedStatement) statement;
+        ps.execute();
+        return ps.getUpdateCount();
     }
 
     @Override

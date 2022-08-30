@@ -29,6 +29,13 @@ public abstract class BaseExecutor implements Executor{
         this.wrapper = this;
     }
 
+
+    @Override
+    public int update(MappedStatement ms, Object parameter, ResultHandler resultHandler, BoundSql boundSql) throws SQLException {
+        return doUpdate(ms,parameter,resultHandler,boundSql);
+    }
+
+
     @Override
     public <E> List<E> query(MappedStatement ms, Object parameter, ResultHandler resultHandler, BoundSql boundSql) {
         if (closed) {
@@ -36,6 +43,9 @@ public abstract class BaseExecutor implements Executor{
         }
         return doQuery(ms, parameter, resultHandler, boundSql);
     }
+
+
+    protected abstract int doUpdate(MappedStatement ms, Object parameter, ResultHandler resultHandler, BoundSql boundSql) throws SQLException;
 
     protected abstract <E> List<E> doQuery(MappedStatement ms, Object parameter, ResultHandler resultHandler, BoundSql boundSql);
 

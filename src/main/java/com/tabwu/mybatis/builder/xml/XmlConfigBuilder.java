@@ -114,36 +114,46 @@ public class XmlConfigBuilder extends BaseBuilder {
             //命名空间
             String namespace = mapperRoot.attributeValue("namespace");
 
+            //INSERT
+            parseSelectNode(namespace, mapperRoot.elements("insert"));
+            //DELETE
+            parseSelectNode(namespace, mapperRoot.elements("delete"));
+            //UPDATE
+            parseSelectNode(namespace, mapperRoot.elements("update"));
             //SELECT
-            List<Element> selects = mapperRoot.elements("select");
-            for (Element selectNode : selects) {
-                String id = selectNode.attributeValue("id");
-                String parameterType = selectNode.attributeValue("parameterType");
-                String resultType = selectNode.attributeValue("resultType");
-                String sql = selectNode.getText();
-
-                // ? 匹配  替换sql语句
-                Map<Integer, String> parameter = new HashMap<>();
-                Pattern pattern = Pattern.compile("(#\\{(.*?)})");
-                Matcher matcher = pattern.matcher(sql);
-                for (int i = 1; matcher.find(); i++) {
-                    String g1 = matcher.group(1);   // 匹配参数位置 如：#{id}
-                    String g2 = matcher.group(2);   // 解析参数、去除参数修饰符号 如：#{id} ==> id
-                    parameter.put(i, g2);           // 封装参数
-                    sql = sql.replace(g1, "?");   // 将SQL语句中的#{id} 替换为 ？
-                }
-
-                String msId = namespace + "." + id;
-                String nodeName = selectNode.getName();
-                SqlCommandType sqlCommandType = SqlCommandType.valueOf(nodeName.toUpperCase(Locale.ENGLISH));
-
-                BoundSql boundSql = new BoundSql(parameterType,resultType,sql,parameter);
-                MappedStatement mappedStatement = new MappedStatement.Builder(configuration, msId, sqlCommandType, boundSql).build();
-                configuration.addMappedStatement(mappedStatement);
-            }
+            parseSelectNode(namespace, mapperRoot.elements("select"));
 
             // 注册Mapper映射器
             configuration.addMapper(Resources.classForName(namespace));
         }
     }
+
+    private void parseSelectNode(String namespace, List<Element> selects) {
+        for (Element selectNode : selects) {
+            String id = selectNode.attributeValue("id");
+            String parameterType = selectNode.attributeValue("parameterType");
+            String resultType = selectNode.attributeValue("resultType");
+            String sql = selectNode.getText();
+
+            // ? 匹配  替换sql语句
+            Map<Integer, String> parameter = new HashMap<>();
+            Pattern pattern = Pattern.compile("(#\\{(.*?)})");
+            Matcher matcher = pattern.matcher(sql);
+            for (int i = 1; matcher.find(); i++) {
+                String g1 = matcher.group(1);   // 匹配参数位置 如：#{id}
+                String g2 = matcher.group(2);   // 解析参数、去除参数修饰符号 如：#{id} ==> id
+                parameter.put(i, g2);           // 封装参数
+                sql = sql.replace(g1, "?");   // 将SQL语句中的#{id} 替换为 ？
+            }
+
+            String msId = namespace + "." + id;
+            String nodeName = selectNode.getName();
+            SqlCommandType sqlCommandType = SqlCommandType.valueOf(nodeName.toUpperCase(Locale.ENGLISH));
+
+            BoundSql boundSql = new BoundSql(parameterType,resultType,sql,parameter);
+            MappedStatement mappedStatement = new MappedStatement.Builder(configuration, msId, sqlCommandType, boundSql).build();
+            configuration.addMappedStatement(mappedStatement);
+        }
+    }
+
 }

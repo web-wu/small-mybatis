@@ -12,5 +12,5 @@ public interface UserMapper {
 
     User queryUserById(Integer id);
 
-    User queryUsernameByAge(int age);
+    int deleteUserById(Integer id);
 }
