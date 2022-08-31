@@ -11,11 +11,14 @@ import com.tabwu.mybatis.executor.statement.StatementHandler;
 import com.tabwu.mybatis.mapping.BoundSql;
 import com.tabwu.mybatis.mapping.Environment;
 import com.tabwu.mybatis.mapping.MappedStatement;
+import com.tabwu.mybatis.plugin.Interceptor;
+import com.tabwu.mybatis.plugin.InterceptorChain;
 import com.tabwu.mybatis.transaction.Transaction;
 import com.tabwu.mybatis.transaction.jdbc.JdbcTransactionFactory;
 import com.tabwu.mybatis.type.TypeAliasRegistry;
 
 import java.util.HashMap;
+import java.util.HashSet;
 
 /**
  * @PROJECT_NAME: small-mybatis
@@ -36,6 +39,12 @@ public class Configuration {
 
     //类型别名注册机
     protected final TypeAliasRegistry typeAliasRegistry = new TypeAliasRegistry();
+
+    //加载过的mapper配置文件
+    protected final HashSet<String> XML_MAPPER_SET = new HashSet<>();
+
+    // 插件拦截器链
+    protected final InterceptorChain interceptorChain = new InterceptorChain();
 
     public Configuration() {
         typeAliasRegistry.registryTypeAlias("JDBC", JdbcTransactionFactory.class);
@@ -93,4 +102,19 @@ public class Configuration {
     public StatementHandler newStatementHandler(Executor executor,MappedStatement ms,Object parameter,ResultHandler resultHandler,BoundSql boundSql) {
         return new PreparedResultHandler(executor,ms,parameter,boundSql);
     }
+
+    // 扫描配置文件后注册插件拦截器
+    public void addInterceptor(Interceptor interceptor) {
+        interceptorChain.addInterceptor(interceptor);
+    }
+
+    // 判断xmlMapper文件是否已经加载过，防止重新加载
+    public boolean isLoadedXmlMapper(String resource) {
+        return XML_MAPPER_SET.contains(resource);
+    }
+
+    public void addXmlMapper(String resource) {
+        XML_MAPPER_SET.add(resource);
+    }
+
 }

@@ -13,4 +13,6 @@ public interface UserMapper {
     User queryUserById(Integer id);
 
     int deleteUserById(Integer id);
+
+    int deleteUserByUsername(String username);
 }

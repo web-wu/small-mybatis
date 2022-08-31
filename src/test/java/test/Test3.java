@@ -26,7 +26,7 @@ public class Test3 {
         SqlSessionFactory sqlSessionFactory = new SqlSessionFactoryBuilder().build(reader);
         SqlSession sqlSession = sqlSessionFactory.openSession();
         UserMapper userMapper = sqlSession.getMapper(UserMapper.class);
-        User user = userMapper.queryUserById(2);
+        User user = userMapper.queryUserById(1);
         System.out.println(user);
     }
 

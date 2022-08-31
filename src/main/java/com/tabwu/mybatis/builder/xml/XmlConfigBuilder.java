@@ -7,6 +7,7 @@ import com.tabwu.mybatis.mapping.BoundSql;
 import com.tabwu.mybatis.mapping.Environment;
 import com.tabwu.mybatis.mapping.MappedStatement;
 import com.tabwu.mybatis.mapping.SqlCommandType;
+import com.tabwu.mybatis.plugin.Interceptor;
 import com.tabwu.mybatis.session.Configuration;
 import com.tabwu.mybatis.transaction.TransactionFactory;
 import org.dom4j.Document;
@@ -17,6 +18,7 @@ import org.xml.sax.InputSource;
 
 import javax.sql.DataSource;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.Reader;
 import java.util.*;
 import java.util.regex.Matcher;
@@ -50,6 +52,8 @@ public class XmlConfigBuilder extends BaseBuilder {
      */
     public Configuration parse() {
         try {
+            //解析插件 plugin
+            parsePluginElement(root.element("plugins"));
 
             // 解析数据源环境
             parseEnvironmentsElement(root.element("environments"));
@@ -60,6 +64,25 @@ public class XmlConfigBuilder extends BaseBuilder {
             throw new RuntimeException("Error parsing SQL Mapper Configuration. Cause: " + e, e);
         }
         return configuration;
+    }
+
+    private void parsePluginElement(Element pluginsEle) throws IllegalAccessException, InstantiationException {
+        if (pluginsEle == null) {
+            return ;
+        }
+         List<Element> plugins = pluginsEle.elements("plugin");
+        for (Element plugin : plugins) {
+            String interceptorClass = plugin.attributeValue("interceptor");
+            Properties properties = new Properties();
+            List<Element> propertyList = plugin.elements("property");
+            for (Element pro : propertyList) {
+                properties.setProperty(pro.attributeValue("name"), pro.attributeValue("value"));
+            }
+
+            Interceptor interceptor = (Interceptor) resolveClass(interceptorClass).newInstance();
+            interceptor.setProperties(properties);
+            configuration.addInterceptor(interceptor);
+        }
     }
 
     /*
@@ -103,10 +126,24 @@ public class XmlConfigBuilder extends BaseBuilder {
         }
     }
 
+    /*
+     * <mappers>
+     *	 <mapper resource="org/mybatis/builder/AuthorMapper.xml"/>
+     *	 <mapper resource="org/mybatis/builder/BlogMapper.xml"/>
+     *	 <mapper resource="org/mybatis/builder/PostMapper.xml"/>
+     * </mappers>
+     */
     private void parseMapperElement(Element mappers) throws IOException, DocumentException, ClassNotFoundException {
         List<Element> mapperList = mappers.elements("mapper");
         for (Element mapper : mapperList) {
             String resource = mapper.attributeValue("resource");
+
+
+            InputStream inputStream = Resources.getResourceAsStream(resource);
+            XMLMapperBuilder xmlMapperBuilder = new XMLMapperBuilder(configuration, resource, inputStream);
+            xmlMapperBuilder.parse();
+
+            /*
             Reader mapperResource = Resources.getResourceAsReader(resource);
             SAXReader reader = new SAXReader();
             Document document = reader.read(new InputSource(mapperResource));
@@ -125,10 +162,12 @@ public class XmlConfigBuilder extends BaseBuilder {
 
             // 注册Mapper映射器
             configuration.addMapper(Resources.classForName(namespace));
+            */
         }
     }
 
-    private void parseSelectNode(String namespace, List<Element> selects) {
+   /*
+   private void parseSelectNode(String namespace, List<Element> selects) {
         for (Element selectNode : selects) {
             String id = selectNode.attributeValue("id");
             String parameterType = selectNode.attributeValue("parameterType");
@@ -155,5 +194,6 @@ public class XmlConfigBuilder extends BaseBuilder {
             configuration.addMappedStatement(mappedStatement);
         }
     }
+    */
 
 }

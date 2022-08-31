@@ -32,7 +32,8 @@ public class DefaultSqlSessionFactory implements SqlSessionFactory {
         try {
             Environment environment = configuration.getEnvironment();
             TransactionFactory transactionFactory = environment.getTransactionFactory();
-            tx = transactionFactory.newTransaction(configuration.getEnvironment().getDataSource(), TransactionIsolationLevel.REPEATABLE_READ, false);
+            //所有操作默认为 自动 提交事务
+            tx = transactionFactory.newTransaction(configuration.getEnvironment().getDataSource(), TransactionIsolationLevel.REPEATABLE_READ, true);
             // 初始化执行器
             Executor executor = configuration.newExecuttor(tx);
 
