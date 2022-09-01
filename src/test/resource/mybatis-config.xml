@@ -5,8 +5,8 @@
 <configuration>
     
     <plugins>
-        <plugin interceptor="">
-            <property name="" value=""/>
+        <plugin interceptor="plugin.TestPlugin">
+            <property name="dbType" value="mysql"/>
         </plugin>
     </plugins>
 

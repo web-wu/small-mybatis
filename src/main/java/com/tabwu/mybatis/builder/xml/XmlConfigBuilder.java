@@ -70,18 +70,20 @@ public class XmlConfigBuilder extends BaseBuilder {
         if (pluginsEle == null) {
             return ;
         }
-         List<Element> plugins = pluginsEle.elements("plugin");
+        List<Element> plugins = pluginsEle.elements("plugin");
         for (Element plugin : plugins) {
             String interceptorClass = plugin.attributeValue("interceptor");
-            Properties properties = new Properties();
-            List<Element> propertyList = plugin.elements("property");
-            for (Element pro : propertyList) {
-                properties.setProperty(pro.attributeValue("name"), pro.attributeValue("value"));
-            }
+            if (!"".equalsIgnoreCase(interceptorClass)) {
+                Properties properties = new Properties();
+                List<Element> propertyList = plugin.elements("property");
+                for (Element pro : propertyList) {
+                    properties.setProperty(pro.attributeValue("name"), pro.attributeValue("value"));
+                }
 
-            Interceptor interceptor = (Interceptor) resolveClass(interceptorClass).newInstance();
-            interceptor.setProperties(properties);
-            configuration.addInterceptor(interceptor);
+                Interceptor interceptor = (Interceptor) resolveClass(interceptorClass).newInstance();
+                interceptor.setProperties(properties);
+                configuration.addInterceptor(interceptor);
+            }
         }
     }
 

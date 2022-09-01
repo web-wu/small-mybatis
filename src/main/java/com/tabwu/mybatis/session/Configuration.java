@@ -6,7 +6,7 @@ import com.tabwu.mybatis.executor.Executor;
 import com.tabwu.mybatis.executor.SimpleExecutor;
 import com.tabwu.mybatis.executor.resultSet.DefaultResultSetsHandler;
 import com.tabwu.mybatis.executor.resultSet.ResultSetHandler;
-import com.tabwu.mybatis.executor.statement.PreparedResultHandler;
+import com.tabwu.mybatis.executor.statement.PreparedStatementHandler;
 import com.tabwu.mybatis.executor.statement.StatementHandler;
 import com.tabwu.mybatis.mapping.BoundSql;
 import com.tabwu.mybatis.mapping.Environment;
@@ -100,7 +100,10 @@ public class Configuration {
 
     //创建语句处理器
     public StatementHandler newStatementHandler(Executor executor,MappedStatement ms,Object parameter,ResultHandler resultHandler,BoundSql boundSql) {
-        return new PreparedResultHandler(executor,ms,parameter,boundSql);
+        StatementHandler statementHandler = new PreparedStatementHandler(executor, ms, parameter, boundSql);
+        //嵌入插件，代理 statementhandler 处理器
+        statementHandler = (StatementHandler) interceptorChain.pluginAll(statementHandler);
+        return statementHandler;
     }
 
     // 扫描配置文件后注册插件拦截器

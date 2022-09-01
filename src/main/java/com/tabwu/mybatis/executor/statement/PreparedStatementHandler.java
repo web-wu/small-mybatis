@@ -17,9 +17,9 @@ import java.util.List;
  * @DATE: 2022/8/29 16:18
  * @DESCRIPTION: 预处理语句处理器
  */
-public class PreparedResultHandler extends BaseStatementHandler{
+public class PreparedStatementHandler extends BaseStatementHandler{
 
-    public PreparedResultHandler(Executor executor, MappedStatement ms, Object paramterObject, BoundSql boundSql) {
+    public PreparedStatementHandler(Executor executor, MappedStatement ms, Object paramterObject, BoundSql boundSql) {
         super(executor, ms, paramterObject, boundSql);
     }
 
