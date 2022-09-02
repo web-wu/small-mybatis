@@ -46,6 +46,9 @@ public class Configuration {
     // 插件拦截器链
     protected final InterceptorChain interceptorChain = new InterceptorChain();
 
+    // 缓存机制，默认为SESSION
+    protected LocalCacheScope localCacheScope = LocalCacheScope.SESSION;
+
     public Configuration() {
         typeAliasRegistry.registryTypeAlias("JDBC", JdbcTransactionFactory.class);
         typeAliasRegistry.registryTypeAlias("DRUID", DruidDataSourceFactory.class);
@@ -87,6 +90,13 @@ public class Configuration {
         this.environment = environment;
     }
 
+    public LocalCacheScope getLocalCacheScope() {
+        return localCacheScope;
+    }
+
+    public void setLocalCacheScope(LocalCacheScope localCacheScope) {
+        this.localCacheScope = localCacheScope;
+    }
 
     // 创建结果集处理器
     public ResultSetHandler newResultSetHandler(Executor executor, MappedStatement ms, BoundSql boundSql) {

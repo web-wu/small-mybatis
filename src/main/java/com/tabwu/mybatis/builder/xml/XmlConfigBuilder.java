@@ -9,6 +9,7 @@ import com.tabwu.mybatis.mapping.MappedStatement;
 import com.tabwu.mybatis.mapping.SqlCommandType;
 import com.tabwu.mybatis.plugin.Interceptor;
 import com.tabwu.mybatis.session.Configuration;
+import com.tabwu.mybatis.session.LocalCacheScope;
 import com.tabwu.mybatis.transaction.TransactionFactory;
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
@@ -52,6 +53,9 @@ public class XmlConfigBuilder extends BaseBuilder {
      */
     public Configuration parse() {
         try {
+            // 解析 设置
+            parseSettingsElement(root.element("settings"));
+
             //解析插件 plugin
             parsePluginElement(root.element("plugins"));
 
@@ -64,6 +68,24 @@ public class XmlConfigBuilder extends BaseBuilder {
             throw new RuntimeException("Error parsing SQL Mapper Configuration. Cause: " + e, e);
         }
         return configuration;
+    }
+
+    /*
+        <settings>
+            <!--缓存级别：SESSION/STATEMENT-->
+            <setting name="localCacheScope" value="SESSION"/>
+        </settings>
+    */
+    private void parseSettingsElement(Element settings) {
+        if (settings == null) {
+            return;
+        }
+        List<Element> elements = settings.elements();
+        Properties props = new Properties();
+        for (Element element : elements) {
+            props.setProperty(element.attributeValue("name"), element.attributeValue("value"));
+        }
+        configuration.setLocalCacheScope(LocalCacheScope.valueOf(props.getProperty("localCacheScope")));
     }
 
     private void parsePluginElement(Element pluginsEle) throws IllegalAccessException, InstantiationException {

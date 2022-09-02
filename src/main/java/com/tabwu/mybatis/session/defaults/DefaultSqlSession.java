@@ -3,6 +3,7 @@ package com.tabwu.mybatis.session.defaults;
 import com.tabwu.mybatis.executor.Executor;
 import com.tabwu.mybatis.mapping.MappedStatement;
 import com.tabwu.mybatis.session.Configuration;
+import com.tabwu.mybatis.session.RowBounds;
 import com.tabwu.mybatis.session.SqlSession;
 
 import java.sql.SQLException;
@@ -38,7 +39,7 @@ public class DefaultSqlSession implements SqlSession {
     public int update(String statement, Object parameter) {
         try {
             MappedStatement ms = configuration.getMappedStatement(statement);
-            return executor.update(ms,parameter,null,ms.getBoundSql());
+            return executor.update(ms,parameter, RowBounds.DEFAULT,null,ms.getBoundSql());
         } catch (SQLException e) {
             throw new RuntimeException("Error updating database.  Cause: " + e);
         }
@@ -66,7 +67,7 @@ public class DefaultSqlSession implements SqlSession {
         try {
             // statement == namespace + id 即方法的全限定名
             MappedStatement mappedStatement = configuration.getMappedStatement(statement);
-            return executor.query(mappedStatement, parameter, Executor.NO_RESULT_HANDLE, mappedStatement.getBoundSql());
+            return executor.query(mappedStatement, parameter, RowBounds.DEFAULT, Executor.NO_RESULT_HANDLE, mappedStatement.getBoundSql());
         } catch (Exception e) {
             throw new RuntimeException("Error updating database.  Cause: " + e);
         }

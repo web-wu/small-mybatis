@@ -4,6 +4,11 @@
 
 <configuration>
     
+    <settings>
+        <!--缓存级别：SESSION/STATEMENT-->
+        <setting name="localCacheScope" value="SESSION"/>
+    </settings>
+
     <plugins>
         <plugin interceptor="plugin.TestPlugin">
             <property name="dbType" value="mysql"/>

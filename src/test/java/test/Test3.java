@@ -28,6 +28,12 @@ public class Test3 {
         UserMapper userMapper = sqlSession.getMapper(UserMapper.class);
         User user = userMapper.queryUserById(1);
         System.out.println(user);
+
+        User user1 = userMapper.queryUserById(1);
+        System.out.println(user1);
+
+        User user2 = userMapper.queryUserById(2);
+        System.out.println(user1);
     }
 
 

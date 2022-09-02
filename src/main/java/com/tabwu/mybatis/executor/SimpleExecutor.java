@@ -5,6 +5,7 @@ import com.tabwu.mybatis.mapping.BoundSql;
 import com.tabwu.mybatis.mapping.MappedStatement;
 import com.tabwu.mybatis.session.Configuration;
 import com.tabwu.mybatis.session.ResultHandler;
+import com.tabwu.mybatis.session.RowBounds;
 import com.tabwu.mybatis.transaction.Transaction;
 
 import java.sql.Connection;
@@ -25,7 +26,7 @@ public class SimpleExecutor extends BaseExecutor{
     }
 
     @Override
-    protected int doUpdate(MappedStatement ms, Object parameter, ResultHandler resultHandler, BoundSql boundSql) throws SQLException {
+    protected int doUpdate(MappedStatement ms, Object parameter, RowBounds rowBounds, ResultHandler resultHandler, BoundSql boundSql) throws SQLException {
         Configuration configuration = ms.getConfiguration();
         StatementHandler statementHandler = configuration.newStatementHandler(this, ms, parameter,resultHandler,boundSql);
         Connection connection = transaction.getConnection();
@@ -35,7 +36,7 @@ public class SimpleExecutor extends BaseExecutor{
     }
 
     @Override
-    protected <E> List<E> doQuery(MappedStatement ms, Object parameter, ResultHandler resultHandler, BoundSql boundSql) {
+    protected <E> List<E> doQuery(MappedStatement ms, Object parameter, RowBounds rowBounds, ResultHandler resultHandler, BoundSql boundSql) {
         try {
             Configuration configuration = ms.getConfiguration();
             // 初始化语句处理器
